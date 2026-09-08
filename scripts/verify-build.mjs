@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import { readFile, stat, writeFile } from 'node:fs/promises';
+const html=await readFile(new URL('../dist/index.html',import.meta.url),'utf8');
+assert.equal((html.match(/<!doctype/gi)||[]).length,1);
+assert.match(html,/<div id="root"><\/div>/);
+assert.match(html,/<title>SLIIT Campus Rush/);
+const scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+assert.equal(scripts.length,1);assert.equal(scripts[0][2].trim(),'');
+const urls=[...html.matchAll(/(?:src|href)="(\/sliit-campus-rush\/assets\/[^\"]+)"/g)].map(m=>m[1]);
+assert.equal(urls.length,2);
+for(const url of urls)assert.ok((await stat(new URL('../dist/'+url.replace('/sliit-campus-rush/',''),import.meta.url))).size>0);
+assert.ok((await stat(new URL('../dist/sliit-logo.png',import.meta.url))).size>0);
+await writeFile(new URL('../dist/.nojekyll',import.meta.url),'');
+console.log('Pages output verified: external JS/CSS, correct base path, and campus logo.');

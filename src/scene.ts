@@ -95,7 +95,7 @@ export function mountGame(host: HTMLDivElement, update: (value: ViewState) => vo
       place(chunk,'tennis',-25,-128,1,0);
     } else {
       place(chunk,'business-school',27,-60,.8,-Math.PI/2);
-      place(chunk,'basketball',-27,-70,1,0);
+      place(chunk,'basketball',-43,-70,1,0);
     }
   }
   // Friendly, original student character with articulated running limbs.
